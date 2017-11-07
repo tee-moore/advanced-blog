@@ -24,7 +24,14 @@ Author: Timur Panchenko
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+//add textdomai
+add_action('init', 'aw_locale');
+function aw_locale() {
+     if(load_plugin_textdomain( 'advanced-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ) === false) echo "1111111111111111111111111111".dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+}
 
+
+//add scripts
 add_action( 'admin_enqueue_scripts', 'aw_admin_enqueue_scripts' );
 function aw_admin_enqueue_scripts(){
     wp_enqueue_script( 'select2-js', plugins_url('/js/selectWoo.full.min.js', __FILE__), array(), null, true );
@@ -40,21 +47,25 @@ function aw_enqueue_scripts(){
 }
 
 
+//add taxonomy 'series' & metabox on post edit page
 add_action('init', 'aw_create_taxonomy');
 function aw_create_taxonomy(){
-    register_taxonomy('taxonomy', array('post'), array(
-        'label'                 => '',
-        'labels'                => array(
-            'name'              => 'Series',
-            'singular_name'     => 'Serie',
-            'search_items'      => 'Search Series',
-            'all_items'         => 'All Series',
-            'view_item '        => 'View Serie',
-            'edit_item'         => 'Edit Serie',
-            'update_item'       => 'Update Serie',
-            'add_new_item'      => 'Add New Serie',
-            'new_item_name'     => 'New Serie Name',
-            'menu_name'         => 'Series',
+    register_taxonomy('series', array('post'), array(
+        'label'                          => __( 'Series', 'advanced-widget' ),
+        'labels'                         => array(
+            'name'                       => __( 'Series', 'advanced-widget' ),
+            'singular_name'              => __( 'Serie', 'advanced-widget' ),
+            'search_items'               => __( 'Search Series', 'advanced-widget' ),
+            'all_items'                  => __( 'All Series', 'advanced-widget' ),
+            'view_item '                 => __( 'View Serie', 'advanced-widget' ),
+            'edit_item'                  => __( 'Edit Serie', 'advanced-widget' ),
+            'update_item'                => __( 'Update Serie', 'advanced-widget' ),
+            'add_new_item'               => __( 'Add New Serie', 'advanced-widget' ),
+            'new_item_name'              => __( 'New Serie Name', 'advanced-widget' ),
+            'separate_items_with_commas' => __( 'Separate series with commas', 'advanced-widget' ),
+            'choose_from_most_used'      => __( 'Choose from the most used series', 'advanced-widget' ),
+            'not_found'                  => __( 'No series found.', 'advanced-widget' ),
+            'menu_name'                  => __( 'Series', 'advanced-widget' ),
         ),
         'description'           => '',
         'public'                => true,
