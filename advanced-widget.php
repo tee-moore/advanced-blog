@@ -27,7 +27,7 @@ Author: Timur Panchenko
 //add textdomai
 add_action('init', 'aw_locale');
 function aw_locale() {
-     if(load_plugin_textdomain( 'advanced-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ) === false) echo "1111111111111111111111111111".dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+     load_plugin_textdomain( 'advanced-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 
@@ -84,3 +84,5 @@ function aw_create_taxonomy(){
         'show_in_quick_edit'    => true,
     ) );
 }
+
+include "widgets/aw_series_widget.php";
