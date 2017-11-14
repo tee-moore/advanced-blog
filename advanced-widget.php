@@ -47,10 +47,10 @@ function aw_enqueue_scripts(){
 }
 
 
-//add taxonomy 'series' & metabox on post edit page
+//add taxonomy 'series' & metabox on page (post) edit page
 add_action('init', 'aw_create_taxonomy');
 function aw_create_taxonomy(){
-    register_taxonomy('series', array('post'), array(
+    register_taxonomy('series', array('post', 'page'), array(
         'label'                          => __( 'Series', 'advanced-widget' ),
         'labels'                         => array(
             'name'                       => __( 'Series', 'advanced-widget' ),
@@ -85,4 +85,4 @@ function aw_create_taxonomy(){
     ) );
 }
 
-include "widgets/aw_series_widget.php";
+include "widgets/aw_dynamic_series_widget.php";

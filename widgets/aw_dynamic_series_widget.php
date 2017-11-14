@@ -2,36 +2,39 @@
 /**
  * Add new widget.
  */
-class AW_Series_Widget extends WP_Widget {
+class AW_Dynamic_Series_Widget extends WP_Widget {
+
+    public $post_types = array('post', 'page');
 
     function __construct() {
 
         parent::__construct(
-            'aw_series_widget',
-            'Series',
-            array( 'description' => __('This is a widget, displays on the article page, a list of articles that come in one cycle along with the current article (on the article editing page, add the name of the series to which it belongs).', 'advanced-widget'), 'classname' => 'aw_series_widget', )
+            'aw_dynamic_series_widget',
+            'Dynamic Series',
+            array( 'description' => __('This is a widget, displays on the article (page), a list of articles (pages) that come in one cycle along with the current article. For this to work, on the article (page) editing page, add the name of the series to which it belongs. Article (page) can not belong to several series.', 'advanced-widget'), 'classname' => 'aw_dynamic_series_widget', )
         );
 
-        // if widget is active
+        // if widget is active add style & script
         if ( is_active_widget( false, false, $this->id_base ) || is_customize_preview() ) {
-            add_action('wp_enqueue_scripts', array( $this, 'add_aw_series_widget_scripts' ));
-            add_action('wp_head', array( $this, 'add_aw_series_widget_style' ) );
+            add_action('wp_footer', array( $this, 'add_aw_dynamic_series_widget_scripts' ));
+            add_action('wp_head', array( $this, 'add_aw_dynamic_series_widget_style' ) );
         }
     }
 
     /**
-     * Front end
+     * Output widget on Front end
      *
      * @param array $args
      * @param array $instance from save options
      */
     function widget( $args, $instance ) {
-        if( is_singular('post') ){
+        global $post_types;
+        if( is_singular( $post_types ) ){
             global $post;
 
             $active_post_id = $post->ID;
-            $title = apply_filters( 'aw_series_widget_title', $instance['title'] );
-            $orderby = apply_filters( 'aw_series_widget_orderby', $instance['orderby'] );
+            $title = apply_filters( 'aw_dynamic_series_widget_title', $instance['title'] );
+            $orderby = apply_filters( 'aw_dynamic_series_widget_orderby', $instance['orderby'] );
             $terms = get_the_terms( $post->ID, 'series' );
             $term = array_shift( $terms );
 
@@ -43,7 +46,7 @@ class AW_Series_Widget extends WP_Widget {
             }
 
             $query = new WP_Query( array(
-                'post_type' => 'post',
+                'post_type' => $post_types,
                 'post_status' => 'publish',
                 'orderby' => $orderby,
                 'order' => 'ASC',
@@ -73,7 +76,7 @@ class AW_Series_Widget extends WP_Widget {
     }
 
     /**
-     * Back end
+     * Output widget on Back end
      *
      * @param array $instance from save options
      */
@@ -115,17 +118,22 @@ class AW_Series_Widget extends WP_Widget {
         return $instance;
     }
 
-    function add_aw_series_widget_scripts() {
-        if( ! apply_filters( 'show_aw_series_widget_script', true, $this->id_base ) )
+    function add_aw_dynamic_series_widget_scripts() {
+        //filter so that you can turn off styles
+        if( ! apply_filters( 'show_aw_dynamic_series_widget_script', true, $this->id_base ) )
             return;
+        ?>
+        <script>
+            jQuery(document).ready(function( $ ) {
 
-        $theme_url = get_stylesheet_directory_uri();
-
-        wp_enqueue_script('my_widget_script', plugins_url('widgets/aw_series_widget.js', __FILE__) );
+            });
+        </script>
+        <?php
     }
 
-    function add_aw_series_widget_style() {
-        if( ! apply_filters( 'show_aw_series_widget_style', true, $this->id_base ) )
+    function add_aw_dynamic_series_widget_style() {
+        //filter so that you can turn off styles
+        if( ! apply_filters( 'show_aw_dynamic_series_widget_style', true, $this->id_base ) )
             return;
         ?>
         <style type="text/css">
@@ -139,6 +147,6 @@ class AW_Series_Widget extends WP_Widget {
 
 //register widgets
 function register_aw_widgets() {
-    register_widget( 'AW_Series_Widget' );
+    register_widget( 'AW_Dynamic_Series_Widget' );
 }
 add_action( 'widgets_init', 'register_aw_widgets' );
