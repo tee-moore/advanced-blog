@@ -24,6 +24,9 @@ Author: Timur Panchenko
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+//settings
+$post_types_support = array('post', 'page');
+
 //add textdomai
 add_action('init', 'aw_locale');
 function aw_locale() {
@@ -85,4 +88,4 @@ function aw_create_taxonomy(){
     ) );
 }
 
-include "widgets/aw_dynamic_series_widget.php";
+include "widgets/aw_series_widget.php";
