@@ -25,7 +25,13 @@ Author: Timur Panchenko
 */
 
 //settings
-$post_types_support = array('post', 'page');
+$settings['add_series_to_post_types'] = array('post');
+$settings['display_on_post_types'] = array('post', 'page');
+$settings['add_supports_to_post_types'] = array('page');
+
+
+
+
 
 //add textdomai
 add_action('init', 'aw_locale');
@@ -53,10 +59,11 @@ function aw_enqueue_scripts(){
 //add taxonomy 'series' & metabox on page (post) edit page
 add_action('init', 'aw_create_taxonomy');
 function aw_create_taxonomy(){
-    register_taxonomy('series', array('post', 'page'), array(
+    global $settings;
+    register_taxonomy('series', $settings['add_series_to_post_types'], array(
         'label'                          => __( 'Series', 'advanced-widget' ),
         'labels'                         => array(
-            'name'                       => __( 'Series', 'advanced-widget' ),
+            'name'                       => __( 'Series of articles', 'advanced-widget' ),
             'singular_name'              => __( 'Serie', 'advanced-widget' ),
             'search_items'               => __( 'Search Series', 'advanced-widget' ),
             'all_items'                  => __( 'All Series', 'advanced-widget' ),
@@ -88,4 +95,35 @@ function aw_create_taxonomy(){
     ) );
 }
 
+
+
+// add meta box category & tags to pages
+function wp_add_categories_tags_for_pages(){
+    global $settings;
+
+    //add_meta_box( 'categorydiv', 'Категории1', 'post_categories_meta_box', $post_types_support, 'side', 'normal'); 
+    //add_meta_box( 'tagsdiv-page_tag', 'Теги1', 'post_tags_meta_box', $post_types_support, 'side', 'normal' );
+    register_taxonomy_for_object_type('category', $settings['add_supports_to_post_types']);
+    register_taxonomy_for_object_type('post_tag', $settings['add_supports_to_post_types']);
+    register_taxonomy_for_object_type('series', $settings['add_supports_to_post_types']);
+}
+add_action('admin_init','wp_add_categories_tags_for_pages');
+
+function aw_widget_request_category($q) {
+    if (isset($q['category_name'])) 
+        $q['post_type'] = $post_types_support;
+    return $q;
+}
+add_filter('request', 'aw_widget_request_category');
+
+function aw_widget_request_post_tags($q) {
+    if (isset($q['tag']))
+        $q['post_type'] = $post_types_support;
+    return $q;
+}
+ 
+add_filter('request', 'aw_widget_request_post_tags');
+
+
+include "widgets/aw_category_widget.php";
 include "widgets/aw_series_widget.php";
