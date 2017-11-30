@@ -60,16 +60,17 @@ class AW_Series_Widget extends WP_Widget {
                 )
             ) );
 
-
+            echo "<ul>";
             while ( $query->have_posts() ) {
                 $query->the_post();
 
                 if( get_the_ID() == $active_post_id ): ?>
-                    <span class="active"><?php the_title(); ?></span><br>
+                    <li><span class="active"><?php the_title(); ?></span></li>
                 <?php else: ?>
-                    <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a><br>
+                    <li><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></li>
                 <?php endif;
             }
+            echo "</ul>";
 
             echo $args['after_widget'];
         }

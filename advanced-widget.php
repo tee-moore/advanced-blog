@@ -27,7 +27,7 @@ Author: Timur Panchenko
 //settings
 $settings['add_series_to_post_types'] = array('post');
 $settings['display_on_post_types'] = array('post', 'page');
-$settings['add_supports_to_post_types'] = array('page');
+$settings['add_supports_to_post_types'] = 'page';
 
 
 
