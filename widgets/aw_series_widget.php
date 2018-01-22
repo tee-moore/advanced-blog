@@ -65,7 +65,7 @@ class AW_Series_Widget extends WP_Widget {
                 $query->the_post();
 
                 if( get_the_ID() == $active_post_id ): ?>
-                    <li><span class="active"><?php the_title(); ?></span></li>
+                    <li class="active"><span class="active"><?php the_title(); ?></span></li>
                 <?php else: ?>
                     <li><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></li>
                 <?php endif;
